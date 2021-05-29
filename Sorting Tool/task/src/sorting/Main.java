@@ -6,7 +6,7 @@ public class Main {
     public static void main(final String[] args) {
         Scanner scanner = new Scanner(System.in);
         String dataType = "";
-        if ("-dataType".equals(args[0])) {
+        if (args.length > 0 && "-dataType".equals(args[0])) {
             dataType = args[1];
         }
         switch (dataType) {
@@ -46,7 +46,8 @@ public class Main {
             }
         }
 
-        System.out.printf("Total numbers: %d%n", totalInput);
-        System.out.printf("The greatest number: %d (%d time(s)%n)", greatest, counter);
+        System.out.println("Total numbers: " + totalInput + ".");
+        System.out.print("The greatest number: " + greatest);
+        System.out.println(" (" + counter + " time(s), " + counter * 100 / totalInput + "%).");
     }
 }
