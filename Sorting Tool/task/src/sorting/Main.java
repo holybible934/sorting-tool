@@ -5,22 +5,27 @@ import java.util.*;
 public class Main {
     public static void main(final String[] args) {
         Scanner scanner = new Scanner(System.in);
-        String dataType = "";
         if (args.length > 0 && "-dataType".equals(args[0])) {
-            dataType = args[1];
+            String dataType = args[1];
+            switch (dataType) {
+                case "line":
+                    printLongestLine(scanner);
+                    break;
+                case "long":
+                    printGreatestLong(scanner);
+                    break;
+                case "word":
+                default:
+                    printLongestWord(scanner);
+                    break;
+            }
+        } else if (args.length > 0 && "-sortIntegers".equals(args[0])) {
+            sortIntegers(scanner);
         }
-        switch (dataType) {
-            case "line":
-                printLongestLine(scanner);
-                break;
-            case "long":
-                printGreatestLong(scanner);
-                break;
-            case "word":
-            default:
-                printLongestWord(scanner);
-                break;
-        }
+    }
+
+    private static void sortIntegers(Scanner scanner) {
+
     }
 
     private static void printLongestWord(Scanner scanner) {
