@@ -1,0 +1,29 @@
+<html>
+ <head></head>
+ <body>
+  <p><strong>Insertion sort</strong> is a simple sorting algorithm that performs an in-place sorting. It divides the array into sorted and unsorted parts. At each iteration, the algorithm moves an element from the unsorted part to the sorted one until all the elements in the array are sorted. The moving element is inserted in a suitable position in the sorted part. For an array of size $n$, the algorithm performs $O(n^2)$ operations in the worst case.</p> 
+  <p>The algorithm is <strong>stable</strong>, i.e. it doesn't change the relative order of identical elements.</p> 
+  <h2 style="text-align: center;">Implementation in Java</h2> 
+  <p>In the following code, the insertion sort algorithm is implemented as a static method. It has two loops. In the outer loop, it takes the next element, and in the nested loop, it moves the element to the sorted part keeping the order.</p> 
+  <pre><code class="language-java">public static int[] insertionSort(int[] array) {
+    /* iterating over elements in the unsorted part */    
+    for (int i = 1; i &lt; array.length; i++) {        
+        int elem = array[i]; // take the next element
+        int j = i - 1;
+            
+        /* find a suitable position to insert and shift elements to the right */
+        while (j &gt;= 0 &amp;&amp; array[j] &gt; elem) {
+            array[j + 1] = array[j]; // shifting
+            j--;
+        }
+        array[j + 1] = elem; // insert the element in the found position in the sorted part
+    }
+        
+    return array;
+}</code></pre> 
+  <p>Let's test the method passing different arrays.</p> 
+  <pre><code class="language-java">insertionSort(new int[] { 21, 23, 19, 30, 11, 28 }); // { 11, 19, 21, 23, 28, 30 }
+insertionSort(new int[] { 30, 28, 23, 21, 19, 11 }); // { 11, 19, 21, 23, 28, 30 }</code></pre> 
+  <p>You can start the implemented algorithm in the debug mode to understand it better.</p>
+ </body>
+</html>
