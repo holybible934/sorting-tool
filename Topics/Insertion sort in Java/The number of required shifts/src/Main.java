@@ -1,14 +1,12 @@
 import java.util.Scanner;
+import java.util.stream.IntStream;
 
 class Main {
     public static void main(String[] args) {
         // put your code here
         Scanner scanner = new Scanner(System.in);
         final int arrSize = scanner.nextInt();
-        int[] arr = new int[arrSize];
-        for (int i = 0; i < arrSize; i++) {
-            arr[i] = scanner.nextInt();
-        }
+        int[] arr = IntStream.range(0, arrSize).map(i -> scanner.nextInt()).toArray();
         System.out.println(insertionSort(arr));
     }
 
