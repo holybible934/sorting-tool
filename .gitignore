@@ -23,3 +23,8 @@
 hs_err_pid*
 /gradlew
 /gradlew.bat
+
+# Unnecessary paths
+.idea/
+.gradle/
+.git/
