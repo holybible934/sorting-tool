@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 class Main {
 
     public static void printFilteredAccounts(List<Account> accounts) {
-        List<Account> nonEmptyAccounts = // write your code here
-        List<Account> accountsWithTooMuchMoney = // write your code here
+        List<Account> nonEmptyAccounts = filter(accounts, acc -> acc.getBalance() > 0); // write your code here
+        List<Account> accountsWithTooMuchMoney = filter(accounts, acc -> !acc.isLocked() && acc.getBalance() >= 100_000_000); // write your code here
 
         // Don't change the code below
         nonEmptyAccounts.forEach(a -> System.out.print(a.getNumber() + " "));
