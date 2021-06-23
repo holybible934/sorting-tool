@@ -5,7 +5,12 @@ import java.util.*;
 public class Main {
     public static void main(final String[] args) {
         Scanner scanner = new Scanner(System.in);
-        if (args.length > 0 && "-dataType".equals(args[0])) {
+        if (args.length > 0 && Arrays.asList(args).contains("-sortIntegers")) {
+            List<Integer> integerList = sortIntegers(scanner);
+            System.out.printf("Total numbers: %d.%nSorted data: ", integerList.size());
+            integerList.stream().sorted().forEachOrdered(e -> System.out.print(e + " "));
+            System.out.println();
+        } else if (args.length > 0 && "-dataType".equals(args[0])) {
             String dataType = args[1];
             switch (dataType) {
                 case "line":
@@ -19,13 +24,15 @@ public class Main {
                     printLongestWord(scanner);
                     break;
             }
-        } else if (args.length > 0 && "-sortIntegers".equals(args[0])) {
-            sortIntegers(scanner);
         }
     }
 
-    private static void sortIntegers(Scanner scanner) {
-
+    private static List<Integer> sortIntegers(Scanner scanner) {
+        List<Integer> integerList = new ArrayList<>();
+        while (scanner.hasNextInt()) {
+            integerList.add(scanner.nextInt());
+        }
+        return integerList;
     }
 
     private static void printLongestWord(Scanner scanner) {
