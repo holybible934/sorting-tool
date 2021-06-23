@@ -3,31 +3,54 @@ package sorting;
 import java.util.*;
 
 public class Main {
+    public enum SORTING_DATA_TYPE {
+        NATURAL_NUMBERS,
+        NATURAL_WORDS,
+        NATURAL_LINES,
+        BYCOUNT_NUMBERS,
+        BYCOUNT_WORDS,
+        BYCOUNT_LINES
+    };
+
     public static void main(final String[] args) {
         Scanner scanner = new Scanner(System.in);
-        if (args.length > 0 && Arrays.asList(args).contains("-sortIntegers")) {
-            List<Integer> integerList = sortIntegers(scanner);
-            System.out.printf("Total numbers: %d.%nSorted data: ", integerList.size());
-            integerList.stream().sorted().forEachOrdered(e -> System.out.print(e + " "));
-            System.out.println();
-        } else if (args.length > 0 && "-dataType".equals(args[0])) {
-            String dataType = args[1];
-            switch (dataType) {
-                case "line":
-                    printLongestLine(scanner);
-                    break;
-                case "long":
-                    printGreatestLong(scanner);
-                    break;
-                case "word":
-                default:
-                    printLongestWord(scanner);
-                    break;
+        List<String> argumentsList = Arrays.asList(args);
+        SORTING_DATA_TYPE sortingDataType;
+        if (argumentsList.contains("byCount")) {
+            if (argumentsList.contains("long")) {
+                sortingDataType = SORTING_DATA_TYPE.BYCOUNT_NUMBERS;
+            } else if (argumentsList.contains("word")) {
+                sortingDataType = SORTING_DATA_TYPE.BYCOUNT_WORDS;
+            } else {
+                sortingDataType = SORTING_DATA_TYPE.BYCOUNT_LINES;
             }
+        } else {
+            if (argumentsList.contains("long")) {
+                sortingDataType = SORTING_DATA_TYPE.NATURAL_NUMBERS;
+            } else if (argumentsList.contains("word")) {
+                sortingDataType = SORTING_DATA_TYPE.NATURAL_WORDS;
+            } else {
+                sortingDataType = SORTING_DATA_TYPE.NATURAL_LINES;
+            }
+        }
+        switch (sortingDataType) {
+            case BYCOUNT_LINES:
+                break;
+            case BYCOUNT_WORDS:
+                break;
+            case BYCOUNT_NUMBERS:
+                break;
+            case NATURAL_WORDS:
+                break;
+            case NATURAL_NUMBERS:
+                break;
+            case NATURAL_LINES:
+            default:
+                break;
         }
     }
 
-    private static List<Integer> sortIntegers(Scanner scanner) {
+    private static List<Integer> saveIntegerList(Scanner scanner) {
         List<Integer> integerList = new ArrayList<>();
         while (scanner.hasNextInt()) {
             integerList.add(scanner.nextInt());
