@@ -86,6 +86,23 @@ public class Main {
     }
 
     private static void sortingWordsByCount(List<String> inputLines) {
+        List<String> inputWords = getWordList(inputLines);
+        LinkedHashMap<String, Long> wordMap = new LinkedHashMap<>();
+        for (String word : inputWords) {
+            wordMap.putIfAbsent(word, inputWords.stream().filter(e -> e.equals(word)).count());
+        }
+        wordMap = (LinkedHashMap<String, Long>) MapUtil.sortByValue(wordMap);
+        System.out.printf("Total numbers: %d.%n", inputWords.size());
+        for (var entry : wordMap.entrySet()) {
+            System.out.printf("%s: %d time(s), %2d%c%n", entry.getKey(), entry.getValue(), (entry.getValue() * 100) / inputWords.size(), '%');
+        }
+    }
+
+    @NotNull
+    private static List<String> getWordList(List<String> inputLines) {
+        return inputLines.stream().map(line -> line.split("\\s+", 0))
+                .flatMap(Arrays::stream)
+                .sorted().collect(Collectors.toList());
     }
 
     private static void sortingLinesByCount(List<String> inputLines) {
@@ -93,9 +110,7 @@ public class Main {
     }
 
     private static void sortingWordsInNatural(List<String> inputLines) {
-        List<String> inputWords = inputLines.stream().map(line -> line.split("\\s+", 0))
-                .flatMap(Arrays::stream)
-                .sorted().collect(Collectors.toList());
+        List<String> inputWords = getWordList(inputLines);
         System.out.printf("Total words: %d.%n", inputWords.size());
         System.out.print("Sorted data: ");
         inputWords.forEach(word -> System.out.print(word + " "));

@@ -384,13 +384,14 @@ feedback_link: https://hyperskill.org/projects/45/stages/242/implement#comment
 status: Failed
 feedback:
   message: |-
-    Wrong answer in test #4
+    Wrong answer in test #5
 
     Can&#39;t find number in the first line of your output.
     Args:
-    -sortingType byCount -dataType word
+    -sortingType byCount -dataType line
     Input:
     1 -2   333 4
+    42
     42
     1                 1
     Your output:
@@ -400,10 +401,11 @@ feedback:
 
     ---
 
-    Arguments: -sortingType byCount -dataType word
+    Arguments: -sortingType byCount -dataType line
 
     &gt; 1 -2   333 4
     &gt; 42
+    &gt; 42
     &gt; 1                 1
-  time: Sat, 26 Jun 2021 13:32:18 UTC
+  time: Sat, 26 Jun 2021 14:02:19 UTC
 record: 2
