@@ -48,7 +48,7 @@ public class Main {
                 sortingWordsByCount(inputLines);
                 break;
             case BYCOUNT_NUMBERS:
-                sortingNumbersByConut(inputLines);
+                sortingNumbersByCount(inputLines);
                 break;
             case NATURAL_WORDS:
                 sortingWordsInNatural(inputLines);
@@ -64,7 +64,7 @@ public class Main {
         }
     }
 
-    private static void sortingNumbersByConut(List<String> inputLines) {
+    private static void sortingNumbersByCount(List<String> inputLines) {
         List<Long> inputLongs = getLongList(inputLines);
         LinkedHashMap<Long, Long> longMap = new LinkedHashMap<>();
         for (long num : inputLongs) {
@@ -79,10 +79,23 @@ public class Main {
 
     @NotNull
     private static List<Long> getLongList(List<String> inputLines) {
-        return inputLines.stream().map(line -> line.split("\\s+", 0))
+        List<Long> longList = removeNonLongStr(inputLines.stream()
+                .map(line -> line.split("\\s+", 0))
                 .flatMap(Arrays::stream)
-                .mapToLong(Long::parseLong)
-                .sorted().boxed().collect(Collectors.toList());
+                .collect(Collectors.toList()));
+        return longList;
+    }
+
+    private static List<Long> removeNonLongStr(List<String> elements) {
+        List<Long> result = new ArrayList<>();
+        elements.forEach(str -> {
+            try {
+                result.add(Long.parseLong(str));
+            } catch (IllegalFormatException e) {
+                System.out.printf("%s is not a long. It will be skipped.%n", "\"" + str + "\"");
+            }
+        });
+        return result;
     }
 
     private static void sortingWordsByCount(List<String> inputLines) {
