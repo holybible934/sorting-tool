@@ -106,7 +106,10 @@ public class Main {
     }
 
     private static void sortingLinesByCount(List<String> inputLines) {
-
+        System.out.printf("Total numbers: %d.%n", inputLines.size());
+        inputLines.stream()
+                .distinct().sorted()
+                .forEachOrdered(System.out::println);
     }
 
     private static void sortingWordsInNatural(List<String> inputLines) {
