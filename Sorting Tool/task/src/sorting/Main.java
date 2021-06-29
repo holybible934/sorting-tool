@@ -7,35 +7,32 @@ import java.util.stream.Collectors;
 
 public class Main {
     public enum SORTING_DATA_TYPE {
-        NATURAL_NUMBERS,
-        NATURAL_WORDS,
-        NATURAL_LINES,
-        BYCOUNT_NUMBERS,
-        BYCOUNT_WORDS,
-        BYCOUNT_LINES
+        NATURAL_NUMBERS("long", true),
+        NATURAL_WORDS("word", true),
+        NATURAL_LINES("line", true),
+        BYCOUNT_NUMBERS("long", false),
+        BYCOUNT_WORDS("word", false),
+        BYCOUNT_LINES("line", false);
+
+        private final String mode;
+        private final boolean sorted;
+        SORTING_DATA_TYPE(String mode, boolean sorted) {
+            this.mode = mode;
+            this.sorted = sorted;
+        }
+
+        public String getMode() {
+            return mode;
+        }
+
+        public boolean isSorted() {
+            return sorted;
+        }
     }
 
     public static void main(final String[] args) {
         Scanner scanner = new Scanner(System.in);
-        List<String> argumentsList = Arrays.asList(args);
-        SORTING_DATA_TYPE sortingDataType;
-        if (argumentsList.contains("byCount")) {
-            if (argumentsList.contains("long")) {
-                sortingDataType = SORTING_DATA_TYPE.BYCOUNT_NUMBERS;
-            } else if (argumentsList.contains("word")) {
-                sortingDataType = SORTING_DATA_TYPE.BYCOUNT_WORDS;
-            } else {
-                sortingDataType = SORTING_DATA_TYPE.BYCOUNT_LINES;
-            }
-        } else {
-            if (argumentsList.contains("long")) {
-                sortingDataType = SORTING_DATA_TYPE.NATURAL_NUMBERS;
-            } else if (argumentsList.contains("word")) {
-                sortingDataType = SORTING_DATA_TYPE.NATURAL_WORDS;
-            } else {
-                sortingDataType = SORTING_DATA_TYPE.NATURAL_LINES;
-            }
-        }
+        SORTING_DATA_TYPE sortingDataType = parseArguments(args);
         List<String> inputLines = new ArrayList<>();
         while (scanner.hasNextLine()) {
             inputLines.add(scanner.nextLine());
@@ -48,7 +45,7 @@ public class Main {
                 sortingWordsByCount(inputLines);
                 break;
             case BYCOUNT_NUMBERS:
-                sortingNumbersByCount(inputLines);
+                sortingNumbersByConut(inputLines);
                 break;
             case NATURAL_WORDS:
                 sortingWordsInNatural(inputLines);
@@ -64,7 +61,72 @@ public class Main {
         }
     }
 
-    private static void sortingNumbersByCount(List<String> inputLines) {
+    @NotNull
+    private static SORTING_DATA_TYPE parseArguments(String[] args) {
+        boolean sorted = true;
+        String mode = "word";
+
+        for (int index = 0; index < args.length; index++) {
+            switch (args[index]) {
+                case "-sortingType":
+                    switch (index + 1 < args.length ? args[++index] : "") {
+                        case "byCount":
+                            sorted = false;
+                            break;
+                        case "natural":
+                            sorted = true;
+                            break;
+                        case "-dataType":   // handle case where dataType follows sortingType without
+                            index--;        // specifying a valid option
+                        default:
+                            System.out.println("No sorting type defined!");
+                            break;
+                    }
+                    break;
+                case "-dataType":
+                    switch (index + 1 < args.length ? args[++index] : "") {
+                        case "long":
+                        case "line":
+                        case "word":
+                            mode = args[index];
+                            break;
+                        case "-sortingType":    // handle case where sortingType follows dataType without
+                            index--;            // specifying a valid option
+                        default:
+                            System.out.println("No data type defined!");
+                            break;
+                    }
+                    break;
+                default:
+                    System.out.printf("\"%s\" is not a valid parameter. It will be skipped.%n",
+                            args[index]);
+                    break;
+            }
+        }
+        switch (mode) {
+            case "long":
+                if (sorted) {
+                    return SORTING_DATA_TYPE.NATURAL_NUMBERS;
+                } else {
+                    return SORTING_DATA_TYPE.BYCOUNT_NUMBERS;
+                }
+            case "line":
+                if (sorted) {
+                    return SORTING_DATA_TYPE.NATURAL_LINES;
+                } else {
+                    return SORTING_DATA_TYPE.BYCOUNT_LINES;
+                }
+            case "word":
+            default:
+                if (sorted) {
+                    return SORTING_DATA_TYPE.NATURAL_WORDS;
+                } else {
+                    return SORTING_DATA_TYPE.BYCOUNT_WORDS;
+                }
+        }
+    }
+
+    private static void sortingNumbersByConut(List<String> inputLines) {
         List<Long> inputLongs = getLongList(inputLines);
         LinkedHashMap<Long, Long> longMap = new LinkedHashMap<>();
         for (long num : inputLongs) {
@@ -79,23 +141,10 @@ public class Main {
 
     @NotNull
     private static List<Long> getLongList(List<String> inputLines) {
-        List<Long> longList = removeNonLongStr(inputLines.stream()
-                .map(line -> line.split("\\s+", 0))
+        return inputLines.stream().map(line -> line.split("\\s+", 0))
                 .flatMap(Arrays::stream)
-                .collect(Collectors.toList()));
-        return longList;
-    }
-
-    private static List<Long> removeNonLongStr(List<String> elements) {
-        List<Long> result = new ArrayList<>();
-        elements.forEach(str -> {
-            try {
-                result.add(Long.parseLong(str));
-            } catch (IllegalFormatException e) {
-                System.out.printf("%s is not a long. It will be skipped.%n", "\"" + str + "\"");
-            }
-        });
-        return result;
+                .mapToLong(Long::parseLong)
+                .sorted().boxed().collect(Collectors.toList());
     }
 
     private static void sortingWordsByCount(List<String> inputLines) {
