@@ -43,22 +43,22 @@ public class Main {
         }
         switch (sortingDataType) {
             case BYCOUNT_LINES:
-                sortingLinesByCount(inputLines);
+                sortingLinesByCount(inputLines, myFiles.outputFile);
                 break;
             case BYCOUNT_WORDS:
-                sortingWordsByCount(inputLines);
+                sortingWordsByCount(inputLines, myFiles.outputFile);
                 break;
             case BYCOUNT_NUMBERS:
-                sortingNumbersByCount(inputLines);
+                sortingNumbersByCount(inputLines, myFiles.outputFile);
                 break;
             case NATURAL_WORDS:
-                sortingWordsInNatural(inputLines);
+                sortingWordsInNatural(inputLines, myFiles.outputFile);
                 break;
             case NATURAL_NUMBERS:
-                sortingNumbersInNatural(inputLines);
+                sortingNumbersInNatural(inputLines, myFiles.outputFile);
                 break;
             case NATURAL_LINES:
-                sortLinesInNatural(inputLines);
+                sortLinesInNatural(inputLines, myFiles.outputFile);
                 break;
             default:
                 break;
@@ -148,16 +148,16 @@ public class Main {
         }
     }
 
-    private static void sortingNumbersByCount(List<String> inputLines) {
+    private static void sortingNumbersByCount(List<String> inputLines, PrintWriter outputFile) {
         List<Long> inputLongs = getLongList(inputLines);
         LinkedHashMap<Long, Long> longMap = new LinkedHashMap<>();
         for (long num : inputLongs) {
             longMap.putIfAbsent(num, inputLongs.stream().filter(i -> i == num).count());
         }
         longMap = (LinkedHashMap<Long, Long>) MapUtil.sortByValue(longMap);
-        System.out.printf("Total numbers: %d.%n", inputLongs.size());
+        outputFile.printf("Total numbers: %d.%n", inputLongs.size());
         for (var set : longMap.entrySet()) {
-            System.out.printf("%d: %d time(s), %2d%c%n", set.getKey(), set.getValue(), (set.getValue() * 100) / inputLongs.size(), '%');
+            outputFile.printf("%d: %d time(s), %2d%c%n", set.getKey(), set.getValue(), (set.getValue() * 100) / inputLongs.size(), '%');
         }
     }
 
@@ -169,16 +169,16 @@ public class Main {
                 .sorted().boxed().collect(Collectors.toList());
     }
 
-    private static void sortingWordsByCount(List<String> inputLines) {
+    private static void sortingWordsByCount(List<String> inputLines, PrintWriter outputFile) {
         List<String> inputWords = getWordList(inputLines);
         LinkedHashMap<String, Long> wordMap = new LinkedHashMap<>();
         for (String word : inputWords) {
             wordMap.putIfAbsent(word, inputWords.stream().filter(e -> e.equals(word)).count());
         }
         wordMap = (LinkedHashMap<String, Long>) MapUtil.sortByValue(wordMap);
-        System.out.printf("Total numbers: %d１.%n", inputWords.size());
+        outputFile.printf("Total numbers: %d１.%n", inputWords.size());
         for (var entry : wordMap.entrySet()) {
-            System.out.printf("%s: %d time(s), %2d%c%n", entry.getKey(), entry.getValue(), (entry.getValue() * 100) / inputWords.size(), '%');
+            outputFile.printf("%s: %d time(s), %2d%c%n", entry.getKey(), entry.getValue(), (entry.getValue() * 100) / inputWords.size(), '%');
         }
     }
 
@@ -189,31 +189,31 @@ public class Main {
                 .sorted().collect(Collectors.toList());
     }
 
-    private static void sortingLinesByCount(List<String> inputLines) {
-        System.out.printf("Total numbers: %d.%n", inputLines.size());
+    private static void sortingLinesByCount(List<String> inputLines, PrintWriter outputFile) {
+        outputFile.printf("Total numbers: %d.%n", inputLines.size());
         inputLines.stream()
                 .distinct().sorted()
-                .forEachOrdered(System.out::println);
+                .forEachOrdered(outputFile::println);
     }
 
-    private static void sortingWordsInNatural(List<String> inputLines) {
+    private static void sortingWordsInNatural(List<String> inputLines, PrintWriter outputFile) {
         List<String> inputWords = getWordList(inputLines);
-        System.out.printf("Total words: %d.%n", inputWords.size());
-        System.out.print("Sorted data: ");
-        inputWords.forEach(word -> System.out.print(word + " "));
+        outputFile.printf("Total words: %d.%n", inputWords.size());
+        outputFile.print("Sorted data: ");
+        inputWords.forEach(word -> outputFile.print(word + " "));
     }
 
-    private static void sortingNumbersInNatural(List<String> inputLines) {
+    private static void sortingNumbersInNatural(List<String> inputLines, PrintWriter outputFile) {
         List<Long> inputLongs = getLongList(inputLines);
-        System.out.printf("Total numbers: %d.%n", inputLongs.size());
-        System.out.print("Sorted data: ");
-        inputLongs.forEach(num -> System.out.print(num + " "));
+        outputFile.printf("Total numbers: %d.%n", inputLongs.size());
+        outputFile.print("Sorted data: ");
+        inputLongs.forEach(num -> outputFile.print(num + " "));
     }
 
-    private static void sortLinesInNatural(List<String> inputLines) {
-        System.out.printf("Total numbers: %d.%n", inputLines.size());
-        System.out.println("Sorted data: ");
-        inputLines.stream().sorted().forEach(System.out::println);
+    private static void sortLinesInNatural(List<String> inputLines, PrintWriter outputFile) {
+        outputFile.printf("Total numbers: %d.%n", inputLines.size());
+        outputFile.println("Sorted data: ");
+        inputLines.stream().sorted().forEach(outputFile::println);
     }
 
     public static class MapUtil {
