@@ -2,6 +2,9 @@ package sorting;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,22 +23,23 @@ public class Main {
             this.mode = mode;
             this.sorted = sorted;
         }
+    }
 
-        public String getMode() {
-            return mode;
-        }
-
-        public boolean isSorted() {
-            return sorted;
+    static class Files {
+        Scanner scanner;
+        PrintWriter outputFile;
+        Files() {
+            scanner = new Scanner(System.in);
+            outputFile = new PrintWriter(System.out);
         }
     }
 
     public static void main(final String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        SORTING_DATA_TYPE sortingDataType = parseArguments(args);
+        Files myFiles = new Files();
+        SORTING_DATA_TYPE sortingDataType = parseArguments(args, myFiles);
         List<String> inputLines = new ArrayList<>();
-        while (scanner.hasNextLine()) {
-            inputLines.add(scanner.nextLine());
+        while (myFiles.scanner.hasNextLine()) {
+            inputLines.add(myFiles.scanner.nextLine());
         }
         switch (sortingDataType) {
             case BYCOUNT_LINES:
@@ -62,7 +66,7 @@ public class Main {
     }
 
     @NotNull
-    private static SORTING_DATA_TYPE parseArguments(String[] args) {
+    private static SORTING_DATA_TYPE parseArguments(String[] args, Files myFiles) {
         boolean sorted = true;
         String mode = "word";
 
@@ -95,6 +99,24 @@ public class Main {
                         default:
                             System.out.println("No data type defined!");
                             break;
+                    }
+                    break;
+                case "-inputFile":
+                    try {
+                        if (index + 1 < args.length) {
+                            myFiles.scanner = new Scanner(new File(args[++index]));
+                        }
+                    } catch (FileNotFoundException exception) {
+                        System.out.println("No such file! Use standard input instead.");
+                    }
+                    break;
+                case "-outputFile":
+                    try {
+                        if (index + 1 < args.length) {
+                            myFiles.outputFile = new PrintWriter(new File(args[++index]));
+                        }
+                    } catch (FileNotFoundException exception) {
+                        System.out.println("No such file! Use standard output instead.");
                     }
                     break;
                 default:
@@ -154,7 +176,7 @@ public class Main {
             wordMap.putIfAbsent(word, inputWords.stream().filter(e -> e.equals(word)).count());
         }
         wordMap = (LinkedHashMap<String, Long>) MapUtil.sortByValue(wordMap);
-        System.out.printf("Total numbers: %d.%n", inputWords.size());
+        System.out.printf("Total numbers: %d１.%n", inputWords.size());
         for (var entry : wordMap.entrySet()) {
             System.out.printf("%s: %d time(s), %2d%c%n", entry.getKey(), entry.getValue(), (entry.getValue() * 100) / inputWords.size(), '%');
         }
