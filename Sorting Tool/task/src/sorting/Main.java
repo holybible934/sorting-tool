@@ -45,7 +45,7 @@ public class Main {
                 sortingWordsByCount(inputLines);
                 break;
             case BYCOUNT_NUMBERS:
-                sortingNumbersByConut(inputLines);
+                sortingNumbersByCount(inputLines);
                 break;
             case NATURAL_WORDS:
                 sortingWordsInNatural(inputLines);
@@ -126,7 +126,7 @@ public class Main {
         }
     }
 
-    private static void sortingNumbersByConut(List<String> inputLines) {
+    private static void sortingNumbersByCount(List<String> inputLines) {
         List<Long> inputLongs = getLongList(inputLines);
         LinkedHashMap<Long, Long> longMap = new LinkedHashMap<>();
         for (long num : inputLongs) {
